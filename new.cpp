@@ -95,42 +95,6 @@ int main()
     bool alive = true;
     while(alive)
     {
-        
-        if(new_xg<new_x) //GO RIGHT
-        {
-            ig = 1;
-            jg = 0;
-        }
-        else if(new_xg>new_x) //GO LEFT
-        {
-            ig = -1;
-            jg = 0;
-        }
-        else if(new_yg<new_y) //GO DOWN
-        {
-            ig = 0;
-            jg = 1;
-        }
-        else if(new_yg>new_y) //GO UP
-        {
-            ig = 0;
-            jg = -1;
-        }
-        
-        new_xg = old_xg+ig;
-        new_yg = old_yg+jg;
-
-        if(map[new_yg][new_xg]!= wall)
-        {
-            gotoxy(new_xg,new_yg);
-            cout<<g1;
-            gotoxy(old_xg,old_yg);
-            cout<<" ";  
-            old_xg = new_xg;
-            old_yg = new_yg;
-        }
-       
-       
         if (GetAsyncKeyState(VK_UP))
         {
             i = 0;
@@ -170,6 +134,42 @@ int main()
             cout<<score;
             
         }
+        
+        if(new_xg<new_x) //GO RIGHT
+        {
+            ig = 1;
+            jg = 0;
+        }
+        else if(new_xg>new_x) //GO LEFT
+        {
+            ig = -1;
+            jg = 0;
+        }
+        else if(new_yg<new_y) //GO DOWN
+        {
+            ig = 0;
+            jg = 1;
+        }
+        else if(new_yg>new_y) //GO UP
+        {
+            ig = 0;
+            jg = -1;
+        }
+        
+        new_xg = old_xg+ig;
+        new_yg = old_yg+jg;
+
+        if(map[new_yg][new_xg]!= wall)
+        {
+            gotoxy(new_xg,new_yg);
+            cout<<g1;
+            gotoxy(old_xg,old_yg);
+            cout<<" ";  
+            old_xg = new_xg;
+            old_yg = new_yg;
+        }
+       
+       
         gotoxy(0,50);
         printf("Ghost's Position (%i,%i)",new_xg,new_yg);
         cout<<endl;
@@ -179,7 +179,7 @@ int main()
         {
             alive = false;
         }
-        Sleep(50);
+        Sleep(71.35);
     }
     system("CLS");
     cout<<"You Failed . Your score was: "<<score;
