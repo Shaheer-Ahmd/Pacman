@@ -175,7 +175,7 @@ int main()
         cout<<endl;
         printf("Pac's Position (%i,%i)",new_x,new_y);
         
-        if(new_x == new_xg && new_y == new_yg)
+        if((new_x == new_xg && new_y == new_yg) || (new_x == new_xg-ig && new_y == new_yg - jg))
         {
             alive = false;
         }
