@@ -73,14 +73,14 @@ int main()
     make_map(map);
     show_arr(map);
     short x = rand() % (col - 2) + 1;
-    short y = row-1;
+    short y = row-2;
     short gx = rand() % (col - 2) + 1;
     short gy = 1;
     
     //PAC INITIALIZATION
     gotoxy(x,y);
     cout<<pac;
-    int i=1,j=0,score = 0;
+    int i=0,j=-1,score = 0;
     gotoxy(col+1,0);
     cout<<"Score: "<<score;
     short old_x = x, old_y = y, new_x = x,new_y = y;
