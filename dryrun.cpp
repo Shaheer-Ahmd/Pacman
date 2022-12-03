@@ -3,6 +3,7 @@
 #include <time.h>
 #include <cstdlib>
 #include <stdlib.h>
+#include <string>
 #include <cmath>
 using namespace std;
 
@@ -11,23 +12,24 @@ const int col = 80;
 const string wall = "#";
 const string food = ".";
 const string no_food = " ";
-const string pacman = "@";
-const string ghost1 = "G";
+const string pacman = "C";
+const string ghost1 = "A";
 
 short pacman_col = rand() % (col - 2) + 1;
 short pacman_row = row-2;
 short ghost_col = rand() % (col - 2) + 1;
 short ghost_row = 1;
 int score = 0;
+int i = 0;    int j = 0;    int ig = 0;    int jg = 0; int precedence_count = 0; int k =0 ;int l = 0;
 
 string map[row][col] = {
     {wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall},
     {wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall},
-    {wall,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,wall},
+    {wall,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,wall},
     {wall,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,food,food,food,wall,food,wall,food,food,food,wall,food,food,food,food,food,food,food,food,food,food,wall},
     {wall,food,food,food,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,food,food,food,food,food,food,food,food,food,wall,food,food,food,food,food,food,food,food,food,food,wall},
     {wall,food,food,food,wall,wall,food,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,food,food,food,wall,food,wall,food,food,food,wall,food,food,food,food,food,food,food,food,food,food,wall},
-    {wall,food,food,food,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,wall},
+    {wall,food,food,food,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,wall},
     {wall,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall},
     {wall,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall},
     {wall,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,wall,wall,wall,wall,wall,wall,wall,wall,wall,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,food,wall},
@@ -47,42 +49,85 @@ string map[row][col] = {
     {wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall}
 };
 
+void ShowConsoleCursor(bool showFlag)
+{
+    HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_CURSOR_INFO     cursorInfo;
+
+    GetConsoleCursorInfo(out, &cursorInfo);
+    cursorInfo.bVisible = showFlag; // set the cursor visibility
+    SetConsoleCursorInfo(out, &cursorInfo);
+}
+
+
 void gotoxy(short x,short y)
 {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),{y,x});
 }
 
+void ColorPrint(const string text, int fg_color, int bg_color)
+{
+    static const char begin_sequence[]{0x1B,'[','\0'};
+    static const char reset[]{0x1B,'[','0','m','\0'};
+
+    cout << begin_sequence << fg_color << ';' << bg_color << 'm' << text << reset;
+}
+
+void coutyellow(string s)
+{
+	ColorPrint(s,33,40);
+}
+void coutblue(string s)
+{
+	ColorPrint(s,96,40);
+}
+void coutred(string s)
+{
+	ColorPrint(s,31,40);
+}
+void coutblack(string s)
+{
+    ColorPrint(s,30,40);
+}
 void print_map()
 {
     for(int i=0;i<row;i++)
     {   
         for(int j= 0 ;j<col;j++)
         {
-        cout<<map[i][j];
+            if(map[i][j] == wall)
+            coutblue(map[i][j]);
+            else if(map[i][j]==food)
+            coutyellow(map[i][j]);
         
         }
         cout<<endl;
     }
 }
 
-int main(){
 
-    int i = 0;    int j = 0;    int ig = 0;    int jg = 0; int precedence_count = 0; int k =0 ;int l = 0;
+
+int main(){
+    
     system("CLS");
     srand(time(0));
-    
+    ShowConsoleCursor(false);
     //MAP INITIALIZATION
     print_map();
     gotoxy(0, col+1);
-    cout<<"Score: "<<score;
+    coutblue("Score: ");
+    coutblue(to_string(score));
     
     //PAC INITIALIZATION
     gotoxy(pacman_row,pacman_col);
-    cout<<pacman;
+    
+    coutyellow(pacman);
 
     //GHOST INITIALIZATION
     gotoxy(ghost_row,ghost_col);
-    cout<<ghost1;
+    
+    coutred(ghost1);
     
     bool alive = true;
     while(alive)
@@ -102,12 +147,13 @@ int main(){
             }  
             
             gotoxy(pacman_row,pacman_col);
-            cout<<no_food;
+            coutblack(no_food);
             pacman_row += i;
             pacman_col += j;
             gotoxy(pacman_row,pacman_col);
-            cout<<pacman;
-        }
+            coutyellow(pacman);
+            
+        }   
 
         if(precedence_count==10) precedence_count = 0;
         if(precedence_count<5){
@@ -134,26 +180,19 @@ int main(){
             
         }
         precedence_count++;
-        gotoxy(35,3);
-        printf("Row: %i  ",precedence_count);
-        
-        
-        
         if(map[ghost_row + ig][ghost_col + jg]!=wall)
         {
             gotoxy(ghost_row,ghost_col);
-            if(map[ghost_row][ghost_col] == food) cout<<food;
-            else cout<<" ";
+            if(map[ghost_row][ghost_col] == food) coutyellow(food);
+            else coutblack(no_food);
             ghost_row += ig;
             ghost_col += jg;
             gotoxy(ghost_row,ghost_col);
-            cout<<ghost1;
+            coutred(ghost1);
         }
         else
         {
-            gotoxy(36,0);
-            printf("Wall Takkar ig: %i  jg: %i",ig,jg);
-            if(jg == 1)//GO RIGHT
+             if(jg == 1)//GO RIGHT
             {
                 if(ghost_row<=pacman_row){ 
                     if(map[ghost_row+1][ghost_col]!=wall){ k = 1; l = 0;} //DOWN
@@ -195,8 +234,6 @@ int main(){
             else if(ig==1)// GO DOWN
             {
                 if(ghost_col<=pacman_col){
-                    gotoxy(37,0);
-                    printf("Inside DOWN");
                     if(map[ghost_row][ghost_col+1]!=wall){ k = 0; l = 1;} //RIGHT
                     else if(map[ghost_row][ghost_col-1]!=wall){ k = 0; l=-1;} //LEFT
                     else if(map[ghost_row-1][ghost_col]!=wall){ k = -1; l = 0;} //UP
@@ -209,112 +246,30 @@ int main(){
             }
 
             gotoxy(ghost_row,ghost_col);
-            if(map[ghost_row][ghost_col] == food) cout<<food;
-            else cout<<no_food;
+            if(map[ghost_row][ghost_col] == food) coutyellow(food);
+            else coutblack(no_food);
             ghost_row += k;
             ghost_col += l;
             gotoxy(ghost_row,ghost_col);
-            cout<<ghost1;
-            gotoxy(40,3);
-            printf("K: %i   L: %i",k,l);
-        }
+            coutred(ghost1);
+            }
     
-    //     else
-    //     {   gotoxy(0,40) ; cout<< "In the wall check!";
-
-    //         if(ig == 1)//WALL ON RIGHT 
-    //         {   
-    //             cout<<"\n"<<"Wall on right before"<<new_xg<<" "<<new_yg;
-    //             if(new_yg>new_y)
-    //             {
-    //                 new_yg -= 1;
-    //             }
-    //             else if(new_yg<new_y)
-    //             {
-    //                 new_yg += 1;
-    //             }
-    //             cout<<"\n"<<"Wall on right after"<<new_xg<<" "<<new_yg;
-    //             new_xg -= 1;
-    //             gotoxy(new_xg,new_yg);
-    //             cout<<g1;
-    //         }
-    //         else if( ig == -1) //wall on left
-    //         {
-    //             new_xg += 1;
-    //             if(new_yg>new_y)
-    //             {
-    //                 new_yg -= 1;
-    //             }
-    //             else if(new_yg<new_y)
-    //             {
-    //                 new_yg += 1;
-    //             }
-    //             gotoxy(new_xg,new_yg);
-    //             cout<<g1;
-    //         }
-    //         else if( jg == 1) // wall below
-    //         {
-    //             new_yg -= 1;
-    //             if(new_xg<new_x)
-    //             {
-    //                 new_xg += 1;
-    //             }
-    //             else if(new_xg>new_x)
-    //             {
-    //                 new_xg -= 1;
-    //             }
-    //             gotoxy(new_xg,new_yg);
-    //             cout<<g1;
-    //         }
-    //         else if( jg == -1) // WALL UP
-    //         {   
-    //             new_yg += 1;
-    //             if(new_xg<new_x)
-    //             {
-    //                 new_xg += 1;
-    //             }
-    //             else if(new_xg>new_x)
-    //             {
-    //                 new_xg -= 1;
-    //             }
-    //             gotoxy(new_xg,new_yg);
-    //             cout<<g1;
-                
-    //         }
-
-    //         //gotoxy(new_xg-ig,new_yg-jg);
-    //         gotoxy(old_yg,old_xg);
-    //         if(map[old_yg][old_xg] ==".")
-    //             cout<<".";
-    //         else
-    //             cout<<" "; 
-    //     }
-
-    //     old_xg = new_xg;
-    //     old_yg = new_yg;
-    //    */
-       
-    //     //gotoxy(0,50);
-    //     // printf("Ghost's Position (%i,%i)",new_xg,new_yg);
-    //     // cout<<endl;
-    //     // printf("Pac's Position (%i,%i)",new_x,new_y);
-    //     // int d = sqrt(pow(new_xg-new_x,2)+pow(new_yg-new_y,2));
-    //     // cout<<"d: "<<d;
-        if((new_x == new_xg && new_y == new_yg) || (new_x == new_xg-ig && new_y == new_yg - jg))
+    
+        if((pacman_row == ghost_row && pacman_col == ghost_col))
         {
             alive = false;
         }
+        
         gotoxy(0, col+8);
-        cout<<score;
-        gotoxy(50,0);
-        printf("Ghost's Position (%i,%i)",ghost_row,ghost_col);
-        cout<<endl;
-        printf("Pac's Position (%i,%i)",pacman_row,pacman_col);
-        Sleep(250);
+        coutblue(to_string(score));
+       
+        Sleep(40);
     }
 
 
-    system("CLS");
-    cout<<"You Failed .Your score was: "<<score;
+    gotoxy(row+2,4);
+    coutred("You Failed. Your score was: ");
+    coutblue(to_string(score));
     return 0;
 }
+
