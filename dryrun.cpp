@@ -67,7 +67,7 @@ void print_map()
 
 int main(){
 
-    int i = 0;    int j = 0;    int ig = 0;    int jg = 0; int col_precedence_count = 0; int row_precedence_count = 0;
+    int i = 0;    int j = 0;    int ig = 0;    int jg = 0; int precedence_count = 0; int k =0 ;int l = 0;
     system("CLS");
     srand(time(0));
     
@@ -109,32 +109,33 @@ int main(){
             cout<<pacman;
         }
 
-        
-        if(col_precedence_count!=5){
-            row_precedence_count = 0;
-            if(ghost_col<pacman_col) //GO RIGHT
+        if(precedence_count==10) precedence_count = 0;
+        if(precedence_count<5){
+            
+            if(ghost_col<=pacman_col) //GO RIGHT
             { jg = 1; ig = 0; }
             else if(ghost_col>pacman_col) //GO LEFT
             {jg = -1; ig = 0; }
-            else if(ghost_row<pacman_row) //GO DOWN
+            else if(ghost_row<=pacman_row) //GO DOWN
             { ig = 1; jg = 0; }
-            else if(ghost_row<pacman_row) //GO UP
-            { ig = 0; jg = -1; }
-            col_precedence_count ++;
+            else if(ghost_row>pacman_row) //GO UP
+            { ig = -1; jg = 0; }
         }
-        else if(row_precedence_count!=5){
-            col_precedence_count = 0;
-            if(ghost_row<pacman_row) //GO DOWN
+        else{
+            
+            if(ghost_row<=pacman_row) //GO DOWN
             { ig = 1; jg = 0; }
-            else if(ghost_row<pacman_row) //GO UP
-            { ig = 0; jg = -1; }
-            else if(ghost_col<pacman_col) //GO RIGHT
+            else if(ghost_row>pacman_row) //GO UP
+            { ig = -1; jg = 0; }
+            else if(ghost_col<=pacman_col) //GO RIGHT
             { jg = 1; ig = 0; }
             else if(ghost_col>pacman_col) //GO LEFT
             {jg = -1; ig = 0; }
-            row_precedence_count ++;
+            
         }
-
+        precedence_count++;
+        gotoxy(35,3);
+        printf("Row: %i  ",precedence_count);
         
         
         
@@ -150,19 +151,72 @@ int main(){
         }
         else
         {
-            if(jg==1)//GO RIGHT
+            gotoxy(36,0);
+            printf("Wall Takkar ig: %i  jg: %i",ig,jg);
+            if(jg == 1)//GO RIGHT
             {
-                if(ghost_row<pacman_row){
-                    if(map[ghost_row+1][ghost_col]!=wall){}
-                    else if(map[ghost_row-1][ghost_col]!=wall){}
-                    else if(map[ghost_row][ghost_col-1]!=wall){}
+                if(ghost_row<=pacman_row){ 
+                    if(map[ghost_row+1][ghost_col]!=wall){ k = 1; l = 0;} //DOWN
+                    else if(map[ghost_row-1][ghost_col]!=wall){ k = -1; l=0;} //UP
+                    else if(map[ghost_row][ghost_col-1]!=wall){ k = 0; l = -1;} //LEFT
                 }
                 else{
-                    if(map[ghost_row-1][ghost_col]!=wall){}
-                    else if(map[ghost_row+1][ghost_col]!=wall){}
-                    else if(map[ghost_row][ghost_col-1]!=wall){}
+                    if(map[ghost_row-1][ghost_col]!=wall){k = -1; l=0;} //UP
+                    else if(map[ghost_row+1][ghost_col]!=wall){k = 1; l = 0;} //DOWN
+                    else if(map[ghost_row][ghost_col-1]!=wall){k = 0; l = -1;} //LEFT
                 }
             }
+            else if(jg == -1) // GO LEFT
+            {
+                if(ghost_row<=pacman_row){
+                    if(map[ghost_row+1][ghost_col]!=wall){ k = 1; l = 0;} //DOWN
+                    else if(map[ghost_row-1][ghost_col]!=wall){ k = -1; l=0;} //UP
+                    else if(map[ghost_row][ghost_col+1]!=wall){ k = 0; l = 1;} //RIGHT
+                }
+                else{
+                    if(map[ghost_row-1][ghost_col]!=wall){k = -1; l=0;} //UP
+                    else if(map[ghost_row+1][ghost_col]!=wall){k = 1; l = 0;} //DOWN
+                    else if(map[ghost_row][ghost_col+1]!=wall){k = 0; l = 1;} //RIGHT
+                }
+            }
+            else if(ig==-1)// GO UP
+            {
+                if(ghost_col<=pacman_col){
+                    if(map[ghost_row][ghost_col+1]!=wall){ k = 0; l = 1;} //RIGHT
+                    else if(map[ghost_row][ghost_col-1]!=wall){ k = 0; l=-1;} //LEFT
+                    else if(map[ghost_row+1][ghost_col]!=wall){ k = 1; l = 0;} //DOWN
+                }
+                else{
+                    if(map[ghost_row][ghost_col-1]!=wall){k = 0; l=-1;} //LEFT
+                    else if(map[ghost_row][ghost_col+1]!=wall){k = 0; l = 1;} //RIGHT
+                    else if(map[ghost_row+1][ghost_col]!=wall){k = 1; l = 0;} //DOWN
+                }
+            }
+            else if(ig==1)// GO DOWN
+            {
+                if(ghost_col<=pacman_col){
+                    gotoxy(37,0);
+                    printf("Inside DOWN");
+                    if(map[ghost_row][ghost_col+1]!=wall){ k = 0; l = 1;} //RIGHT
+                    else if(map[ghost_row][ghost_col-1]!=wall){ k = 0; l=-1;} //LEFT
+                    else if(map[ghost_row-1][ghost_col]!=wall){ k = -1; l = 0;} //UP
+                }
+                else{
+                    if(map[ghost_row][ghost_col-1]!=wall){k = 0; l=-1;} //RIGHT
+                    else if(map[ghost_row][ghost_col+1]!=wall){k = 0; l = 1;} //LEFT
+                    else if(map[ghost_row-1][ghost_col]!=wall){k = -1; l = 0;} //UP
+                }
+            }
+
+            gotoxy(ghost_row,ghost_col);
+            if(map[ghost_row][ghost_col] == food) cout<<food;
+            else cout<<no_food;
+            ghost_row += k;
+            ghost_col += l;
+            gotoxy(ghost_row,ghost_col);
+            cout<<ghost1;
+            gotoxy(40,3);
+            printf("K: %i   L: %i",k,l);
         }
     
     //     else
@@ -246,12 +300,16 @@ int main(){
     //     // printf("Pac's Position (%i,%i)",new_x,new_y);
     //     // int d = sqrt(pow(new_xg-new_x,2)+pow(new_yg-new_y,2));
     //     // cout<<"d: "<<d;
-    //     // if((new_x == new_xg && new_y == new_yg) || (new_x == new_xg-ig && new_y == new_yg - jg))
-    //     // {
-    //     //     alive = false;
-    //     // }
+        if((new_x == new_xg && new_y == new_yg) || (new_x == new_xg-ig && new_y == new_yg - jg))
+        {
+            alive = false;
+        }
         gotoxy(0, col+8);
         cout<<score;
+        gotoxy(50,0);
+        printf("Ghost's Position (%i,%i)",ghost_row,ghost_col);
+        cout<<endl;
+        printf("Pac's Position (%i,%i)",pacman_row,pacman_col);
         Sleep(250);
     }
 
