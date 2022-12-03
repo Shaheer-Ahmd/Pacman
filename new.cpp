@@ -3,41 +3,42 @@
 #include <time.h>
 #include <cstdlib>
 #include <stdlib.h>
+#include <cmath>
 using namespace std;
 
-const int row = 25;
+const int row = 24;
 const int col = 80;
 const string wall = "#";
 const string pac = "@";
 const string g1 = "G";
-string map[row][col];
-// string map[25][80]=
-// 	{
-// 		{wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall},
-// 		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,".",".",".",wall,".",wall,".",".",".",wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,".",".",".",".",".",".",".",".",".",wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,".",wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,".",".",".",wall,".",wall,".",".",".",wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",wall,wall,wall,wall,wall,".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",wall,wall,wall,wall,wall,".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
-// 		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
-// 		{wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall}}
-// 	;
+//string map[row][col];
+string map[25][80]=
+	{
+		{wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall},
+		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,".",".",".",wall,".",wall,".",".",".",wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,".",".",".",".",".",".",".",".",".",wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,".",wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,".",".",".",wall,".",wall,".",".",".",wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall, wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",wall,wall,wall,wall,wall,".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",wall,wall,wall,wall,wall,wall,wall,wall,wall,".",".",".",".",".",".",".",".",".",".",wall,wall,wall,".",".",".",".",wall,wall,wall,wall,wall,".",".",".",".",wall,wall,wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall,wall,wall,wall,wall,wall,".",".",".",".",".",wall},
+		{wall,".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",wall},
+		{wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall}}
+	;
 void gotoxy(short x,short y)
 {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),{x,y});
@@ -79,7 +80,6 @@ int main()
 {   
     system("CLS");
     srand(time(0));
-    make_map(map);
     show_arr(map);
     short x = rand() % (col - 2) + 1;
     short y = row-2;
@@ -131,18 +131,16 @@ int main()
             gotoxy(new_x,new_y);
             cout<<pac;
             gotoxy(old_x,old_y);
-            cout<<" ";  
+            if(map[old_y][old_x] == ".")
+            {
+                map[old_y][old_x] = " ";
+                score++;
+            }
+            cout<<" ";
             old_x = new_x;
             old_y = new_y;
-            gotoxy(col+8,0);
-            cout<<score;
-            
         }
-        else 
-        {
-            map[old_x][old_y] = " ";
-            score++;
-        }
+        
         
         if(new_xg<new_x) //GO RIGHT
         {
@@ -173,25 +171,100 @@ int main()
             gotoxy(new_xg,new_yg);
             cout<<g1;
             gotoxy(old_xg,old_yg);
-            if(map[new_yg][new_xg] ==".")
-            cout<<".";
+            if(map[old_yg][old_xg] ==".")
+                cout<<".";
             else
-            cout<<" ";  
-            old_xg = new_xg;
-            old_yg = new_yg;
+                cout<<" ";  
+            
         }
+        else
+        {   gotoxy(0,40) ; cout<< "In the wall check!";
+
+            if(ig == 1)//WALL ON RIGHT 
+            {   
+                cout<<"\n"<<"Wall on right before"<<new_xg<<" "<<new_yg;
+                if(new_yg>new_y)
+                {
+                    new_yg -= 1;
+                }
+                else if(new_yg<new_y)
+                {
+                    new_yg += 1;
+                }
+                cout<<"\n"<<"Wall on right after"<<new_xg<<" "<<new_yg;
+                new_xg -= 1;
+                gotoxy(new_xg,new_yg);
+                cout<<g1;
+            }
+            else if( ig == -1) //wall on left
+            {
+                new_xg += 1;
+                if(new_yg>new_y)
+                {
+                    new_yg -= 1;
+                }
+                else if(new_yg<new_y)
+                {
+                    new_yg += 1;
+                }
+                gotoxy(new_xg,new_yg);
+                cout<<g1;
+            }
+            else if( jg == 1) // wall below
+            {
+                new_yg -= 1;
+                if(new_xg<new_x)
+                {
+                    new_xg += 1;
+                }
+                else if(new_xg>new_x)
+                {
+                    new_xg -= 1;
+                }
+                gotoxy(new_xg,new_yg);
+                cout<<g1;
+            }
+            else if( jg == -1) // WALL UP
+            {   
+                new_yg += 1;
+                if(new_xg<new_x)
+                {
+                    new_xg += 1;
+                }
+                else if(new_xg>new_x)
+                {
+                    new_xg -= 1;
+                }
+                gotoxy(new_xg,new_yg);
+                cout<<g1;
+                
+            }
+
+            //gotoxy(new_xg-ig,new_yg-jg);
+            gotoxy(old_yg,old_xg);
+            if(map[old_yg][old_xg] ==".")
+                cout<<".";
+            else
+                cout<<" "; 
+        }
+
+        old_xg = new_xg;
+        old_yg = new_yg;
        
        
         gotoxy(0,50);
         printf("Ghost's Position (%i,%i)",new_xg,new_yg);
         cout<<endl;
         printf("Pac's Position (%i,%i)",new_x,new_y);
-        
+        // int d = sqrt(pow(new_xg-new_x,2)+pow(new_yg-new_y,2));
+        // cout<<"d: "<<d;
         if((new_x == new_xg && new_y == new_yg) || (new_x == new_xg-ig && new_y == new_yg - jg))
         {
             alive = false;
         }
-        Sleep(71.35);
+        gotoxy(col+8,0);
+        cout<<score;
+        Sleep(250);
     }
     system("CLS");
     cout<<"You Failed .Your score was: "<<score;
