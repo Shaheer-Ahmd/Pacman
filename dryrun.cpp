@@ -123,8 +123,6 @@ int main(){
     gotoxy(pacman_row,pacman_col);
     
     coutyellow(pacman);
-
-    //GHOST INITIALIZATION
     gotoxy(ghost_row,ghost_col);
     
     coutred(ghost1);
