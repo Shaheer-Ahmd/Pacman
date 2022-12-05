@@ -49,7 +49,7 @@ string map[row][col] = {
     {wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall}
 };
 
-void ShowConsoleCursor(bool showFlag)
+void ShowConsoleCursor(bool showFlag)`
 {
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -261,7 +261,7 @@ int main(){
         gotoxy(0, col+8);
         coutblue(to_string(score));
        
-        Sleep(40);
+        Sleep(50);
     }
 
 
