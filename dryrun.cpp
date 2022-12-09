@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string>
 #include <cmath>
+#include <conio.h>
 using namespace std;
 
 const int row = 24;
@@ -13,13 +14,14 @@ const string wall = "#";
 const string food = ".";
 const string no_food = " ";
 const string pacman = "C";
-const string ghost1 = "A";
+const string ghost1 = "G";
 
 short pacman_col = rand() % (col - 2) + 1;
 short pacman_row = row-2;
 short ghost_col = rand() % (col - 2) + 1;
 short ghost_row = 1;
 int score = 0;
+int count=0;
 int i = 0;    int j = 0;    int ig = 0;    int jg = 0; int precedence_count = 0; int k =0 ;int l = 0;
 
 string map[row][col] = {
@@ -49,7 +51,7 @@ string map[row][col] = {
     {wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall}
 };
 
-void ShowConsoleCursor(bool showFlag)`
+void ShowConsoleCursor(bool showFlag)
 {
     HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -90,6 +92,81 @@ void coutblack(string s)
 {
     ColorPrint(s,30,40);
 }
+void InterFace()
+{   
+    string rwall="##############################################################################\n";
+    string rsim="#                                                                            #\n";
+    string wall="#"; string start="PRESS ANY KEY TO START";
+    string rp1="       +++       +    ++++++  +           +    +    +             +         ";
+    string rp2="       ++++    +   +  +    +  + +       + +  +   +  ++            +         ";
+    string rp3="       +++++   +   +  +    +  +  +     +  +  +   +  + +           +         ";
+    string rp4="       ++++++  +++++  +       +   +   +   +  +++++  +  +          +         ";
+    string rp5="       ++++++  +++++  +       +    + +    +  +++++  +   +         +         ";
+    string rp6="       +++++   +   +  +       +     +     +  +   +  +    +        +         ";
+    string rp7="       ++++    +   +  +       +           +  +   +  +     +       +         ";
+    string rp8="       +++     +   +  +       +           +  +   +  +      +      +         ";
+    string rp9="       +       +   +  +       +           +  +   +  +       +     +         ";
+    string rp10="       +       +   +  +       +           +  +   +  +        +    +         ";
+    string rp11="       +       +   +  +       +           +  +   +  +         +   +         ";
+    string rp12="       +       +   +  +       +           +  +   +  +          +  +         ";
+    string rp13="       +       +   +  +    +  +           +  +   +  +           + +         ";
+    string rp14="       +       +   +  +    +  +           +  +   +  +            ++         ";
+    string rp15="       +       +   +  ++++++  +           +  +   +  +             +         ";
+    string rstart="#                           "; string rstart1="                                 #\n";
+   coutblue(rwall); coutblue(rsim); coutblue(rsim); coutblue(rsim); coutblue(wall); coutyellow(rp1); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutyellow(rp2); coutblue(wall); cout<<"\n"; coutblue(wall); coutyellow(rp3); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutyellow(rp4); coutblue(wall); cout<<"\n"; coutblue(wall); coutyellow(rp5); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutyellow(rp6); coutblue(wall); cout<<"\n"; coutblue(wall); coutyellow(rp7); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutyellow(rp8); coutblue(wall); cout<<"\n"; coutblue(wall); coutyellow(rp9); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutyellow(rp10); coutblue(wall); cout<<"\n"; coutblue(wall); coutyellow(rp11); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutyellow(rp12); coutblue(wall); cout<<"\n"; coutblue(wall); coutyellow(rp13); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutyellow(rp14); coutblue(wall); cout<<"\n"; coutblue(wall); coutyellow(rp15); coutblue(wall); cout<<"\n"; 
+    coutblue(rsim); coutblue(rstart); coutblue(start); coutblue(rstart1); coutblue(rsim); coutblue(rsim); coutblue(rwall);
+    cout<<endl;
+    coutred("Instructions\n");
+    coutred("1- Move the Pacman using ARROW keys.");
+    coutred("\n2-Try to eat half of the food no the map before the timer runs out.");
+    coutred("\n3-Avoid the ghost (unless you like them).");
+    getch();
+}
+void game_over()
+{
+     
+    string wall="#";
+    string rwall="##############################################################################\n";
+    string rsim="#                                                                            #\n";
+    string rg1="  +++++++   ++++   +             +  ++++  +++++++  +     +  ++++  ++++++++  ";
+    string rg2="  +        +    +  ++           ++  +     +     +  +     +  +     +      +  ";
+    string rg3="  +        +    +  + +         + +  +     +     +  +     +  +     +      +  ";
+    string rg4="  +        +    +  +  +       +  +  +     +     +  +     +  +     +      +  ";
+    string rg5="  +        ++++++  +   +     +   +  +     +     +  +     +  +     +      +  ";
+    string rg6="  +        ++++++  +    +   +    +  +     +     +  +     +  +     ++++++++  ";
+    string rg7="  +        +    +  +     + +     +  +     +     +  +     +  +     +         ";
+    string rg8="  +        +    +  +      +      +  ++++  +     +  +     +  ++++  + +       ";
+    string rg9="  +        +    +  +             +  +     +     +  +     +  +     +  +      ";
+    string rg10="  +        +    +  +             +  +     +     +  +     +  +     +   +     ";
+    string rg11="  +        +    +  +             +  +     +     +  +     +  +     +    +    ";
+    string rg12="  +  ++++  +    +  +             +  +     +     +  +     +  +     +     +   ";
+    string rg13="  +     +  +    +  +             +  +     +     +  +     +  +     +      +  ";
+    string rg14="  +     +  +    +  +             +  +     +     +    + +    +     +       + ";
+    string rg15="  +++++++  +    +  +             +  ++++  +++++++     +     ++++  +         ";
+    coutblue(rwall); coutblue(rsim); coutblue(rsim); coutblue(rsim); coutblue(wall); coutred(rg1); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutred(rg2); coutblue(wall); cout<<"\n"; coutblue(wall); coutred(rg3); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutred(rg4); coutblue(wall); cout<<"\n"; coutblue(wall); coutred(rg5); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutred(rg6); coutblue(wall); cout<<"\n"; coutblue(wall); coutred(rg7); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutred(rg8); coutblue(wall); cout<<"\n"; coutblue(wall); coutred(rg9); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutred(rg10); coutblue(wall); cout<<"\n"; coutblue(wall); coutred(rg11); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutred(rg12); coutblue(wall); cout<<"\n"; coutblue(wall); coutred(rg13); coutblue(wall); cout<<"\n";
+    coutblue(wall); coutred(rg14); coutblue(wall); cout<<"\n"; coutblue(wall); coutred(rg15); coutblue(wall); cout<<"\n"; 
+    coutblue(rsim); coutblue(rsim); coutblue(rsim); coutblue(rwall);
+    gotoxy(20,15);
+    coutblue("You managed to eat ");
+    coutblue(to_string(score));
+    coutblue(" pieces of food in ");
+    coutblue(to_string(count/100));
+    coutblue(" seconds.");
+    
+}
 void print_map()
 {
     for(int i=0;i<row;i++)
@@ -109,8 +186,11 @@ void print_map()
 
 
 int main(){
+    system("CLS");
+    InterFace();
     
     system("CLS");
+    
     srand(time(0));
     ShowConsoleCursor(false);
     //MAP INITIALIZATION
@@ -253,21 +333,24 @@ int main(){
             }
     
     
-        if((pacman_row == ghost_row && pacman_col == ghost_col))
+        if((pacman_row == ghost_row && pacman_col == ghost_col) || (count/100 >= 40))
         {
             alive = false;
         }
-        
+         count=count+10;
+    gotoxy(1,col+1);
+    coutblue("Count: ");
+    if(count%100==0)
+    {
+        coutblue(to_string(count/100));
+    }
         gotoxy(0, col+8);
-        coutblue(to_string(score));
-       
+        coutblue(to_string(score));      
         Sleep(50);
+    
     }
 
-
-    gotoxy(row+2,4);
-    coutred("You Failed. Your score was: ");
-    coutblue(to_string(score));
+    system("CLS");
+    game_over();
     return 0;
 }
-
