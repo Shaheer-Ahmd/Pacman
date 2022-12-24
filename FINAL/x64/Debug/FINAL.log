@@ -1,0 +1,3 @@
+﻿  FINAL.cpp
+C:\Users\gamer\Desktop\LUMS\CS\Pacman_project\Pacman\FINAL\FINAL.cpp(393,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  FINAL.vcxproj -> C:\Users\gamer\Desktop\LUMS\CS\Pacman_project\Pacman\FINAL\x64\Debug\FINAL.exe
