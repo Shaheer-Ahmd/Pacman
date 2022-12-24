@@ -1,4 +1,3 @@
-OPEN THE FINAL.sln FILE IN VISUAL STUDIO AS THE PLAYSOUND() COMMANDS DO NOT WORK IN VS CODE.
 
 Game instructions:
 1- Move the Pacman with arrow keys.
