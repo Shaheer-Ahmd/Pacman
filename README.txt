@@ -1,4 +1,6 @@
 
+THE CODE ITSELF IS CONTATAINED IN THE "FINAL.SLN" FILE.  
+
 INSTRUCTIONS:
 1- Move the Pacman with arrow keys.
 2- Eat the specified amount of food in the given time whilst avoiding the ghost.
